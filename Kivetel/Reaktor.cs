@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Kivetel
 {
-    internal class Hajtomu : IKomponens
+    internal class Reaktor : IKomponens
     {
-        int toloero; //MW ekvivalens
+        int teljesitmeny = 0;
 
-        public Hajtomu(int toloero)
+        public Reaktor(int teljesitmeny)
         {
-            this.toloero = toloero;
+            this.teljesitmeny = teljesitmeny;
         }
 
         public int Teljesitmeny { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -20,8 +20,8 @@ namespace Kivetel
 
         public void Aktival()
         {
-            Teljesitmeny = toloero;
-            Allapot = true;
+            Teljesitmeny = teljesitmeny * (-1);
+            Allapot= true;
         }
 
         public void Deaktival()

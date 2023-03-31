@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace Kivetel
 {
     public enum UrhajoKategoria 
-    {   Yacht=2, 
-        Korvett=4, 
-        Fregatt=6, 
-        Rombolo=8, 
-        Teher=8, 
-        Allomas= 20
+    {   Yacht, 
+        Korvett, 
+        Fregatt, 
+        Rombolo, 
+        Teher, 
+        Allomas
     }
     internal class Program
     {

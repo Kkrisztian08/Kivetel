@@ -9,7 +9,7 @@ namespace Kivetel
     internal interface IKomponens
     {
         int Teljesitmeny { get; set; } //MW
-        bool Allapot { get;  }
+        bool Allapot { get; set; }
 
         void Aktival();
         void Deaktival();
