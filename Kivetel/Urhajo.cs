@@ -19,8 +19,25 @@ namespace Kivetel
 
         public Urhajo(string nev, int uresTomeg, int aktualisTeljesitmeny, UrhajoKategoria kategoria, IKomponens komponensek)
         {
-            this.nev = nev;
-            this.uresTomeg = uresTomeg;
+            
+            if (nev==null)
+            {
+                throw new ArgumentNullException($"Hiba!\nA név (ami most '{nev}') nem lehet egyenlő a null értékkel!");
+            }
+            else
+            {
+                this.nev = nev;
+            }
+
+            if (0>=uresTomeg)
+            {
+                throw new ArgumentOutOfRangeException($"Hiba!\nAz űrhajó aktuális tömege (ami most {uresTomeg} kg) nem lehet kisebb vagy egyenlő nullával!");
+            }
+            else
+            {
+                this.uresTomeg = uresTomeg;
+            }
+            
             this.aktualisTeljesitmeny = aktualisTeljesitmeny;
             this.kategoria = kategoria;
             if (kategoria==UrhajoKategoria.Yacht)
@@ -52,10 +69,58 @@ namespace Kivetel
         {
             int idx = 0;
             komponensek[idx++] = komponens;
+            if (idx+1== komponensek.Length)
+            {
+                throw new KomponensNemFerElKivetel("nincs üres hely, de szerintem nem ez kell ide",komponens);
+            }
         }
         public void KomponensLeszerel(int index)
         {
+           
+            if (komponensek[index]==null)
+            {
+                throw new KomponensNemTalalhatoKivetel("Nem található");
+            }
             komponensek[index] = null;
+        }
+
+        public void Padlogaz()
+        {
+            for (int i = 0; i < komponensek.Length; i++)
+            {
+                if (komponensek[i].Allapot==false)
+                {
+                    komponensek[i].Aktival();
+                    int teljesitménySzámitás=aktualisTeljesitmeny-komponensek[i].Teljesitmeny;
+                    if (0>teljesitménySzámitás)
+                    {
+                        komponensek[i].Deaktival();
+                        throw new NincsElegEnergiaKivetel(teljesitménySzámitás);
+                        
+                        for (int j = 0; j < komponensek.Length; j++)
+                        {
+                            komponensek[j].Deaktival();
+
+                        }
+                    }
+                }
+            }
+            
+        }
+
+        public void Beindit()
+        {
+            
+            for (int i = 0; i < komponensek.Length; i++)
+            {
+                if (komponensek[i] is Reaktor)
+                {
+                    komponensek[i].Aktival();
+                }
+                int szam = 0;
+                szam += komponensek[i].Teljesitmeny;
+                szam += aktualisTeljesitmeny;
+            }
         }
     }
 }

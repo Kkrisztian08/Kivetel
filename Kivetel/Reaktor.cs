@@ -20,12 +20,22 @@ namespace Kivetel
 
         public void Aktival()
         {
+            
+            if (this.teljesitmeny==0)
+            {
+                throw new NotSupportedException();
+            }
             Teljesitmeny = teljesitmeny * (-1);
-            Allapot= true;
+            Allapot = true;
         }
 
         public void Deaktival()
         {
+            
+            if (Allapot==false)
+            {
+                throw new InvalidOperationException();
+            }
             Teljesitmeny = 0;
             Allapot = false;
         }
