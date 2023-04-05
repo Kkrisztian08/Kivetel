@@ -11,8 +11,7 @@ namespace Kivetel
     {
         public string nev { get; }
         public int uresTomeg { get; } //kg
-
-        public int aktualisTeljesitmeny { get; } //MW
+        public int aktualisTeljesitmeny { get; private set; } //MW
 
         UrhajoKategoria kategoria;
         IKomponens[] komponensek;
@@ -68,11 +67,22 @@ namespace Kivetel
         public void KomponensFelszerel(IKomponens komponens)
         {
             int idx = 0;
+            bool vanHely=true;
             komponensek[idx++] = komponens;
-            if (idx+1== komponensek.Length)
+            while (komponensek.Length>idx && vanHely)
             {
-                throw new KomponensNemFerElKivetel("nincs üres hely, de szerintem nem ez kell ide",komponens);
+                if (komponensek[idx]==null)
+                {
+                    vanHely = false;
+                    komponensek[idx] = komponens;
+                }
+                idx++;
             }
+            if (vanHely)
+            {
+                throw new KomponensNemFerElKivetel("",komponens);
+            }
+            
         }
         public void KomponensLeszerel(int index)
         {
@@ -88,38 +98,66 @@ namespace Kivetel
         {
             for (int i = 0; i < komponensek.Length; i++)
             {
-                if (komponensek[i].Allapot==false)
+                if (komponensek[i] is Hajtomu)
                 {
-                    komponensek[i].Aktival();
-                    int teljesitménySzámitás=aktualisTeljesitmeny-komponensek[i].Teljesitmeny;
-                    if (0>teljesitménySzámitás)
+                    if (komponensek[i].Allapot == false)
                     {
-                        komponensek[i].Deaktival();
-                        throw new NincsElegEnergiaKivetel(teljesitménySzámitás);
-                        
-                        for (int j = 0; j < komponensek.Length; j++)
+                        komponensek[i].Aktival();
+                        int teljesitménySzámitás = aktualisTeljesitmeny - komponensek[i].Teljesitmeny;
+                        if (0 > teljesitménySzámitás)
                         {
-                            komponensek[j].Deaktival();
-
+                            komponensek[i].Deaktival();
+                            for (int j = 0; j < komponensek.Length; j++)
+                            {
+                                komponensek[i].Deaktival();
+                                aktualisTeljesitmeny += komponensek[i].Teljesitmeny;
+                            }
                         }
+                        throw new NincsElegEnergiaKivetel(teljesitménySzámitás);
                     }
                 }
+                
             }
+            Console.WriteLine($"");
             
         }
 
         public void Beindit()
         {
-            
+            Console.WriteLine($"");
             for (int i = 0; i < komponensek.Length; i++)
             {
-                if (komponensek[i] is Reaktor)
+                try
                 {
-                    komponensek[i].Aktival();
+                    if (komponensek[i] is Reaktor)
+                    {
+                        komponensek[i].Aktival();
+                        aktualisTeljesitmeny += komponensek[i].Teljesitmeny;
+                    }
                 }
-                int szam = 0;
-                szam += komponensek[i].Teljesitmeny;
-                szam += aktualisTeljesitmeny;
+                catch (InvalidOperationException IOE)
+                {
+                    Console.WriteLine(IOE.Message);
+                }catch(NotSupportedException ) 
+                {
+                    KomponensLeszerel(i);
+                } 
+            }
+        }
+
+        public void Leallit()
+        {
+            Console.WriteLine($"");
+            try
+            {
+                for (int i = 0; i < komponensek.Length; i++)
+                {
+                    komponensek[i].Deaktival();
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw new NemDeaktivalhatoKivetel("", Exception);
             }
         }
     }

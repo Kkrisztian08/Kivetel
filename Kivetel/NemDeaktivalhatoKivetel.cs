@@ -8,7 +8,9 @@ namespace Kivetel
 {
     internal class NemDeaktivalhatoKivetel : Exception
     {
-        public NemDeaktivalhatoKivetel(string message) : base(message)
+        
+
+        public NemDeaktivalhatoKivetel(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

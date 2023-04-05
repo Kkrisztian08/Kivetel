@@ -20,8 +20,12 @@ namespace Kivetel
 
         public void Aktival()
         {
+            if (Allapot=true)
+            {
+                throw new InvalidOperationException("[HIBA]");
+            }
             
-            if (this.teljesitmeny==0)
+            else if (this.teljesitmeny==0)
             {
                 throw new NotSupportedException();
             }

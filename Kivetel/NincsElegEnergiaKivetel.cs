@@ -9,11 +9,12 @@ namespace Kivetel
     internal class NincsElegEnergiaKivetel : Exception
     {
         int hianyMerteke { get; }
+        static string uzenetecske;
 
-        public NincsElegEnergiaKivetel(int hianyMerteke)
+        public NincsElegEnergiaKivetel(int hianyMerteke) : base(message: uzenetecske)
         {
+            uzenetecske = $"Nincs elég teljsitmény, {hianyMerteke} MW hiányzik";
             this.hianyMerteke = hianyMerteke;
-
         }
     }
 }
