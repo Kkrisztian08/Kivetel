@@ -20,9 +20,9 @@ namespace Kivetel
 
         public void Aktival()
         {
-            if (Allapot=true)
+            if (Allapot==true)
             {
-                throw new InvalidOperationException("[HIBA]");
+                throw new InvalidOperationException("[HIBA] Egy reaktor már fut!");
             }
             
             else if (this.teljesitmeny==0)

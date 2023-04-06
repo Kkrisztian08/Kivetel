@@ -16,12 +16,12 @@ namespace Kivetel
         UrhajoKategoria kategoria;
         IKomponens[] komponensek;
 
-        public Urhajo(string nev, int uresTomeg, int aktualisTeljesitmeny, UrhajoKategoria kategoria, IKomponens komponensek)
+        public Urhajo(string nev, int uresTomeg, int aktualisTeljesitmeny, UrhajoKategoria kategoria)
         {
             
             if (nev==null)
             {
-                throw new ArgumentNullException($"Hiba!\nA név (ami most '{nev}') nem lehet egyenlő a null értékkel!");
+                throw new ArgumentNullException($"[KIVETEL] Value cannot be null.\nParameter name: nev");
             }
             else
             {
@@ -30,7 +30,7 @@ namespace Kivetel
 
             if (0>=uresTomeg)
             {
-                throw new ArgumentOutOfRangeException($"Hiba!\nAz űrhajó aktuális tömege (ami most {uresTomeg} kg) nem lehet kisebb vagy egyenlő nullával!");
+                throw new ArgumentOutOfRangeException($"[KIVETEL] Az üres tömeg nem lehet negatív!\nParameter name: uresTomeg");
             }
             else
             {
@@ -63,35 +63,44 @@ namespace Kivetel
             {
                 this.komponensek = new IKomponens[20];
             }
+            Console.WriteLine($"{this.nev} létrehozva!");
         }
         public void KomponensFelszerel(IKomponens komponens)
         {
             int idx = 0;
             bool vanHely=true;
-            komponensek[idx++] = komponens;
+            
             while (komponensek.Length>idx && vanHely)
             {
                 if (komponensek[idx]==null)
                 {
-                    vanHely = false;
                     komponensek[idx] = komponens;
+                    vanHely = false;
+                    Console.WriteLine($"[Hozzaadas] Hajtomu hozzaadva a(z) {this.nev} hajohoz");
                 }
                 idx++;
+                
             }
+            
             if (vanHely)
             {
-                throw new KomponensNemFerElKivetel("",komponens);
+                throw new KomponensNemFerElKivetel("[KIVETEL] A komponens nem fér el!", komponens);
             }
             
         }
         public void KomponensLeszerel(int index)
         {
            
-            if (komponensek[index]==null)
+            if (index>komponensek.Length)
             {
-                throw new KomponensNemTalalhatoKivetel("Nem található");
+                throw new KomponensNemTalalhatoKivetel("[KIVETEL] A törölni kívánt komponens nem található!");
+            }
+            else if(komponensek[index] == null )
+            {
+                throw new KomponensNemTalalhatoKivetel("[KIVETEL] A törölni kívánt komponens nem található!");
             }
             komponensek[index] = null;
+            Console.WriteLine($"[Leszereles] A(z) {index} indexu komponens leszerelve a(z) {this.nev} hajorol");
         }
 
         public void Padlogaz()
@@ -124,7 +133,6 @@ namespace Kivetel
 
         public void Beindit()
         {
-            Console.WriteLine($"");
             for (int i = 0; i < komponensek.Length; i++)
             {
                 try
@@ -133,6 +141,7 @@ namespace Kivetel
                     {
                         komponensek[i].Aktival();
                         aktualisTeljesitmeny += komponensek[i].Teljesitmeny;
+                        Console.WriteLine($"[Beinditas] A(z) {this.nev} urhajo beinditva");
                     }
                 }
                 catch (InvalidOperationException IOE)
@@ -147,9 +156,10 @@ namespace Kivetel
 
         public void Leallit()
         {
-            Console.WriteLine($"");
+            
             try
             {
+                Console.WriteLine($"[Leallitas] A(z) {this.nev} urhajo leallitasa meghivva");
                 for (int i = 0; i < komponensek.Length; i++)
                 {
                     komponensek[i].Deaktival();
@@ -157,7 +167,7 @@ namespace Kivetel
             }
             catch (Exception Exception)
             {
-                throw new NemDeaktivalhatoKivetel("", Exception);
+                throw new NemDeaktivalhatoKivetel("[KIVETEL] Egy komponens nem deaktiválható!", Exception);
             }
         }
     }
