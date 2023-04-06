@@ -10,13 +10,17 @@ namespace Kivetel
     {
         int toloero; //MW ekvivalens
 
+        public Hajtomu()
+        {
+        }
+
         public Hajtomu(int toloero)
         {
             this.toloero = toloero;
         }
 
-        public int Teljesitmeny { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Allapot { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+         public int Teljesitmeny { get;  set; }
+         public bool Allapot { get;  set; }
 
         public void Aktival()
         {

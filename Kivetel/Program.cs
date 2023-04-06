@@ -35,8 +35,8 @@ namespace Kivetel
                 //u1.KomponensFelszerel(h2);
                 //u1.KomponensFelszerel(h2);
                 u1.KomponensLeszerel(1);
-                //u1.Beindit();
-                //u1.Padlogaz();
+                u1.Beindit();
+                u1.Padlogaz();
                 u1.Leallit();
             }
             catch (Exception e)

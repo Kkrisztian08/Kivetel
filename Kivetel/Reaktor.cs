@@ -15,8 +15,8 @@ namespace Kivetel
             this.teljesitmeny = teljesitmeny;
         }
 
-        public int Teljesitmeny { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Allapot { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int Teljesitmeny { get  ; set; }
+        public  bool Allapot { get ; set ; }
 
         public void Aktival()
         {

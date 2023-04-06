@@ -103,6 +103,28 @@ namespace Kivetel
             Console.WriteLine($"[Leszereles] A(z) {index} indexu komponens leszerelve a(z) {this.nev} hajorol");
         }
 
+        public void Beindit()
+        {
+            for (int i = 0; i < komponensek.Length; i++)
+            {
+                try
+                {
+                    if (komponensek[i] is Reaktor)
+                    {
+                        Console.WriteLine($"[Beinditas] A(z) {this.nev} urhajo beinditva");
+                        komponensek[i].Aktival();
+                        aktualisTeljesitmeny += komponensek[i].Teljesitmeny;
+                    }
+                }
+                catch (InvalidOperationException IOE)
+                {
+                    Console.WriteLine(IOE.Message);
+                }catch(NotSupportedException ) 
+                {
+                    KomponensLeszerel(i);
+                } 
+            }
+        }
         public void Padlogaz()
         {
             for (int i = 0; i < komponensek.Length; i++)
@@ -125,45 +147,20 @@ namespace Kivetel
                         throw new NincsElegEnergiaKivetel(teljesitménySzámitás);
                     }
                 }
-                
-            }
-            Console.WriteLine($"");
-            
-        }
 
-        public void Beindit()
-        {
-            for (int i = 0; i < komponensek.Length; i++)
-            {
-                try
-                {
-                    if (komponensek[i] is Reaktor)
-                    {
-                        komponensek[i].Aktival();
-                        aktualisTeljesitmeny += komponensek[i].Teljesitmeny;
-                        Console.WriteLine($"[Beinditas] A(z) {this.nev} urhajo beinditva");
-                    }
-                }
-                catch (InvalidOperationException IOE)
-                {
-                    Console.WriteLine(IOE.Message);
-                }catch(NotSupportedException ) 
-                {
-                    KomponensLeszerel(i);
-                } 
             }
-        }
+            Console.WriteLine($"[Padlogaz] A(z) {this.nev} urhajo padlogazon megy");
 
+        }
         public void Leallit()
         {
-            
             try
             {
-                Console.WriteLine($"[Leallitas] A(z) {this.nev} urhajo leallitasa meghivva");
                 for (int i = 0; i < komponensek.Length; i++)
                 {
                     komponensek[i].Deaktival();
                 }
+                Console.WriteLine($"[Leallitas] A(z) {this.nev} urhajo leallitasa meghivva");
             }
             catch (Exception Exception)
             {
