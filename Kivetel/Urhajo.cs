@@ -127,21 +127,23 @@ namespace Kivetel
         }
         public void Padlogaz()
         {
+            bool hamis=false;
+            int teljesitménySzámitás;
             for (int i = 0; i < komponensek.Length; i++)
             {
                 if (komponensek[i] is Hajtomu)
                 {
-                    if (komponensek[i].Allapot == false)
+                    if (komponensek[i].Allapot == hamis)
                     {
                         komponensek[i].Aktival();
-                        int teljesitménySzámitás = aktualisTeljesitmeny - komponensek[i].Teljesitmeny;
+                        teljesitménySzámitás = aktualisTeljesitmeny - komponensek[i].Teljesitmeny;
                         if (0 > teljesitménySzámitás)
                         {
                             komponensek[i].Deaktival();
                             for (int j = 0; j < komponensek.Length; j++)
                             {
                                 komponensek[i].Deaktival();
-                                aktualisTeljesitmeny += komponensek[i].Teljesitmeny;
+                                aktualisTeljesitmeny = aktualisTeljesitmeny + komponensek[i].Teljesitmeny;
                             }
                         }
                         throw new NincsElegEnergiaKivetel(teljesitménySzámitás);
@@ -150,7 +152,7 @@ namespace Kivetel
 
             }
             Console.WriteLine($"[Padlogaz] A(z) {this.nev} urhajo padlogazon megy");
-
+            
         }
         public void Leallit()
         {
@@ -158,7 +160,7 @@ namespace Kivetel
             {
                 for (int i = 0; i < komponensek.Length; i++)
                 {
-                    komponensek[i].Deaktival();
+                    komponensek[i]?.Deaktival();
                 }
                 Console.WriteLine($"[Leallitas] A(z) {this.nev} urhajo leallitasa meghivva");
             }

@@ -13,7 +13,7 @@ namespace Kivetel
 
         public NincsElegEnergiaKivetel(int hianyMerteke) : base(message: uzenetecske)
         {
-            uzenetecske = $"Nincs elég teljsitmény, {hianyMerteke} MW hiányzik";
+            uzenetecske = $"[KIVETEL] Nincs elég teljesítmény, {uzenetecske} MW hiányzik";
             this.hianyMerteke = hianyMerteke;
         }
     }
